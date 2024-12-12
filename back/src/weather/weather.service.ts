@@ -22,12 +22,14 @@ export class WeatherService {
 
     try {
       const response = await axios.get(url, { params });
+
       const simplifiedData = {
         city: response.data.name,
         temperature: response.data.main.temp,
         weather: response.data.weather[0].description,
         recommendedActivity: this.getRecommendedActivity(
           response.data.weather[0].main,
+          response.data.main.temp,
         ),
       };
       // Make call to db to save weather data
@@ -47,16 +49,34 @@ export class WeatherService {
     }
   }
 
-  private getRecommendedActivity(weather: string): string {
-    const activities: Record<string, string> = {
-      Clear: 'A walk in the fresh air',
-      Clouds: 'A trip to a cafe with a book',
-      Rain: 'Going to the cinema',
-      Snow: 'Playing in the snow or sledding',
-      Thunderstorm: 'Staying at home with a favorite movie',
-      Drizzle: 'Shopping at the mall',
-      Mist: 'Relaxing at home with a hot tea',
-    };
-    return activities[weather] || 'Suggest your favorite activity';
+  private getRecommendedActivity(weather: string, temperature: number): string {
+    if (temperature > 25 && weather === 'Clear') {
+      return 'A picnic in the park';
+    }
+
+    if (temperature > 20 && weather === 'Clear') {
+      return 'A walk in the fresh air';
+    }
+
+    if (temperature > 15 && ['Clouds', 'Mist'].includes(weather)) {
+      return 'Exploring local attractions';
+    }
+
+    if (temperature <= 15 && ['Clouds', 'Mist'].includes(weather)) {
+      return 'A trip to a cafe with a book';
+    }
+
+    if (['Rain', 'Thunderstorm', 'Drizzle'].includes(weather)) {
+      if (temperature > 15) {
+        return 'Shopping at the mall';
+      }
+      return 'Board games at home';
+    }
+
+    if (weather === 'Snow') {
+      return 'Playing in the snow or sledding';
+    }
+
+    return 'Enjoy an activity that suits your mood';
   }
 }

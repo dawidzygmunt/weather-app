@@ -12,3 +12,12 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model queries {
+  id                   Int      @id @default(autoincrement())
+  city_name            String
+  query_date           DateTime @default(now())
+  temperature          Int
+  weather_condition    String
+  recommended_activity String
+}

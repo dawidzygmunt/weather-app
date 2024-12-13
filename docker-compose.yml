@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./back
+    container_name: weather-backend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres?schema=dev
+    networks:
+      - weather-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./front
+    container_name: weather-frontend
+    ports:
+      - '3001:3000'
+    depends_on:
+      - backend
+    networks:
+      - weather-network
+
+  # PostgreSQL
+  db:
+    image: postgres:13
+    container_name: weather-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - weather-network
+
+networks:
+  weather-network:
+    driver: bridge

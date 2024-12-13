@@ -44,7 +44,7 @@ export class WeatherService {
 
       return simplifiedData;
     } catch (error) {
-      console.error('Error fetching weather data:', error.message);
+      console.log(error);
       throw new Error('Failed to fetch weather data');
     }
   }
@@ -54,7 +54,7 @@ export class WeatherService {
       return 'A picnic in the park';
     }
 
-    if (temperature > 20 && weather === 'Clear') {
+    if (temperature >= 20 && weather === 'Clear') {
       return 'A walk in the fresh air';
     }
 

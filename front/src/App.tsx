@@ -1,27 +1,21 @@
-import "./App.css"
-import Navbar from "./components/navbar"
-import { Card, CardContent, CardHeader } from "./components/ui/card"
-import WeatherTile from "./components/weatherTile"
+import { Route, Routes } from 'react-router'
+import HomePage from './components/homePage'
+import Stats from './components/stats'
 
 function App() {
   return (
-    <div className="min-h-screen w-full bg-[#0c0b11] ">
-      <Navbar />
-      <div className="grid grid-cols-3 gap-10 p-14">
-        <div className=" ">
-          {/* TODO: Integrate with weather API */}
-          <WeatherTile />
-        </div>
-
-        <div className="col-span-2">
-          <Card className="">
-            <CardHeader>Recommended activities</CardHeader>
-            <CardContent>Based on weather in your location</CardContent>
-            {/* TODO: Integrate with weather API && Add best activity */}
-          </Card>
-        </div>
-      </div>
-    </div>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
+        <Route
+          path="/stats"
+          element={<Stats />}
+        />
+      </Routes>
+    </>
   )
 }
 
